@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>SILO COMPUTATION</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div id="dimg">
+    <h4 id="h4ilo">Pesticides</h4><br/>
+    <img src="img/Aluminium-Phosphide.jpg" alt="grain-pesticides" />
+</div>
+<div id="dinfo">
+    <p id="info"></p><br/>
+</div>
+<div id="dform">
+    <h4 id="h4id">Pesticides Doses</h4><br/>
+    <fieldset>
+        <ol>
+            <li>
+                <hr style="min-width:85%; background-color:#a1a1a1 !important; height:5px;"/>
+                <p>Volume of enclosure to be treated</p>
+                <div id="styled-volume-structure-select">
+                    <select class="volume-control" name="scenario" id="volume-structure">
+                        <option value="nap" selected="selected">Select a Scenario</option>
+                        <option value="volume-scenario1">Prism Over Cuboid</option>
+                        <option value="volume-scenario2">Cuboid</option>
+                        <option value="volume-scenario3">Prism Over Rectangular Base</option>
+                        <option value="volume-scenario4">Cylindrical/Cone Cover Without a Tarp</option>
+                        <option value="volume-scenario5">Cylindrical/Cone Cover With a Tarp</option>
+                        <option value="volume-scenario6">A sack of grain</option>
+                    </select>
+                </div>
+            </li>
+            <hr style="min-width:85%; background-color:green !important; height:2px;"/>
+            <div class="form-group">
+                <p>Prism Over Cuboid Structure</p>
+            </div>
+            <li>
+                <input type="text" id="volume-heightp" name="volume-heightp" placeholder="Height of Prism (meter)">
+            </li>
+            <li>
+                <input type="text" id="volume-heightcb" name="volume-heightcb" placeholder="Height of Cuboid (meter)">
+            </li>
+            <li>
+                <input type="text" id="volume-lengthcb" name="volume-lengthcb" placeholder="Length of Cuboid (meter)">
+            </li>
+            <li>
+                <input type="text" id="volume-widthcb" name="volume-widthcb" placeholder="Width of Cuboid (meter)">
+            </li>
+            <hr style="min-width:85%; background-color:green !important; height:2px;"/>
+            <div class="form-group">
+                <p>Cuboid (Only) Structure</p>
+            </div>
+            <li>
+                <input type="text" id="volume-heightco" name="volume-heightco" placeholder="Height of Cuboid (meter)">
+            </li>
+            <li>
+                <input type="text" id="volume-lengthco" name="volume-lengthco" placeholder="Length of Cuboid (meter)">
+            </li>
+            <li>
+                <input type="text" id="volume-widthco" name="volume-widthco" placeholder="Width of Cuboid (meter)">
+            </li>
+            <hr style="min-width:85%; background-color:green !important; height:2px;"/>
+            <div class="form-group">
+                <p>Fumicover Structure</p>
+            </div>
+            <li>
+                <input type="text" id="volume-heightfc" name="volume-heightfc" placeholder="Height of Fumicover (meter)">
+            </li>
+            <li>
+                <input type="text" id="volume-lengthfc" name="volume-lengthfc" placeholder="Length of Fumicover (meter)">
+            </li>
+            <li>
+                <input type="text" id="volume-basefc" name="volume-basefc" placeholder="Base of Cuboid (meter)">
+            </li>
+            <hr style="min-width:85%; background-color:green !important; height:2px;"/>
+            <div class="form-group">
+                <p>Cone Over Cylinder Structure</p>
+            </div>
+            <li>
+                <input type="text" id="volume-diametercl" name="volume-diametercl" placeholder="Diameter Cylinder (meter)">
+            </li>
+            <li>
+                <input type="text" id="volume-heightcn" name="volume-heightcn" placeholder="Height of Cone (meter)">
+            </li>
+            <li>
+                <input type="text" id="volume-heightcl" name="volume-heightcl" placeholder="Height of Cylinder (meter)">
+            </li>
+            <hr style="min-width:85%; background-color:green !important; height:2px;"/>
+            <div class="form-group">
+                <p>Sack Structure</p>
+            </div>
+            <li>
+                <input type="text" id="volume-diametersc" name="volume-diametersc" placeholder="Diameter Sack (meter)">
+            </li>
+            <li>
+                <input type="text" id="volume-heightsc" name="volume-heightsc" placeholder="Height of sack (meter)">
+            </li>
+            <hr style="min-width:85%; background-color:#a1a1a1 !important; height:5px;"/>
+            <li>
+                <input type="button" id="submitbtn" value="Compute" onclick="compute()">
+            </li>
+        </ol>
+    </fieldset>
+</div>
+<div id="dlast">
+
+</div>
+<script>
+      function isCharDigit(c){
+	      if(c >= '0' && c <= '9')
+              return true;   //!!n.trim() && !!Number(n+.1); // "+.1' to make it work with "." and "0" Chars
+      }
+
+      function numberInvalid(str){
+          var invalidChar = false;
+          var char;
+          var dot = 0;
+          if(str.length > 0){
+	            for( char of str ) {
+    	            if((isCharDigit(char) === false) && (char === '.')){
+   		                dot = dot + 1;
+    	            }else if((isCharDigit(char) === false) && (char !== '.')){
+		                invalidChar = true;
+	                    break;
+	                }
+	            }
+	            if(dot > 1){
+	                invalidChar = true;
+	            }
+          }else{
+	            invalidChar = true;
+	      }
+          return invalidChar;
+      }
+
+      function compute() {
+          var datastr = "";
+          var errmsg= "";
+	  var struc = document.getElementById("volume-structure");
+          var structure = struc.options[struc.selectedIndex].value;
+          var heightp = document.getElementById("volume-heightp").value;
+          var heightcb = document.getElementById("volume-heightcb").value;
+          var lengthcb = document.getElementById("volume-lengthcb").value;
+          var widthcb = document.getElementById("volume-widthcb").value;
+
+          var heightco = document.getElementById("volume-heightco").value;
+          var lengthco = document.getElementById("volume-lengthco").value;
+          var widthco = document.getElementById("volume-widthco").value;
+
+          var heightfc = document.getElementById("volume-heightfc").value;
+          var lengthfc = document.getElementById("volume-lengthfc").value;
+          var basefc = document.getElementById("volume-basefc").value;
+
+          var diametercl = document.getElementById("volume-diametercl").value;
+          var heightcn = document.getElementById("volume-heightcn").value;
+          var heightcl = document.getElementById("volume-heightcl").value;
+
+          var diametersc = document.getElementById("volume-diametersc").value;
+          var heightsc = document.getElementById("volume-heightsc").value;
+
+          if(structure === "nap"){
+               errmsg = errmsg + "Select a structure.";
+               document.getElementById("info").innerHTML = errmsg;
+          }
+          if(structure === "volume-scenario1"){
+              if (numberInvalid(heightp)) {
+                   errmsg = errmsg + "Value of height of prism invalid.\n";
+              } else{
+                   heightp = parseFloat(heightp);
+                   if(heightp < 1.00)
+                        errmsg = errmsg + heightp + " height not accepted.\n";
+              }
+              if (numberInvalid(heightcb)) {
+                   errmsg = errmsg + "Value of height of cuboid invalid.\n";
+              } else{
+                   heightcb = parseFloat(heightcb);
+                   if(heightcb < 1.00)
+                        errmsg = errmsg + heightcb + " height not accepted.\n";
+              }
+              if (numberInvalid(lengthcb)) {
+                   errmsg = errmsg + "Value of length of cuboid invalid.\n";
+              } else{
+                   lengthcb = parseFloat(lengthcb);
+                   if(lengthcb < 1.00)
+                        errmsg = errmsg + lengthcb + " length not accepted.\n";
+              }
+              if (numberInvalid(widthcb)) {
+                    errmsg = errmsg + "Value of width of cuboid invalid.\n";
+              } else{
+                   widthcb = parseFloat(widthcb);
+                   if(widthcb < 1.00)
+                        errmsg = errmsg + widthcb + " width not accepted.\n";
+              }
+	          if (errmsg !== "") {
+                   document.getElementById("info").innerHTML = errmsg;
+                   return;
+              } else {
+                   var datastr = "structure=" + structure + ";heightp=" + heightp + ";heightcb=" + heightcb +
+                   ";lengthcb=" + lengthcb + ";widthcb=" + widthcb + ";";
+                   sendClientMsg(datastr);
+              }
+          }else if(structure === "volume-scenario2"){
+              if (numberInvalid(heightco)) {
+                   errmsg = errmsg + "Value of height of cuboid invalid.\n";
+              } else{
+                   heightco = parseFloat(heightco);
+                   if(heightco < 1.00)
+                        errmsg = errmsg + heightco + " height not accepted.\n";
+              }
+              if (numberInvalid(lengthco)) {
+                   errmsg = errmsg + "Value of length of cuboid invalid.\n";
+              } else{
+                   lengthco = parseFloat(lengthco);
+                   if(lengthco < 1.00)
+                        errmsg = errmsg + lengthco + " length not accepted.\n";
+              }
+              if (numberInvalid(widthco)) {
+                   errmsg = errmsg + "Value of width of cuboid invalid.\n";
+              } else{
+                   widthco = parseFloat(widthco);
+                   if(widthco < 1.00)
+                        errmsg = errmsg + widthco + " width not accepted.\n";
+              }
+	          if (errmsg !== "") {
+                   document.getElementById("info").innerHTML = errmsg;
+                   return;
+              } else {
+                   var datastr = "structure=" + structure + ";heightco=" + heightco + ";lengthco=" + lengthco +
+                   ";widthco=" + widthco + ";";
+                   sendClientMsg(datastr);
+              }
+          }else if(structure === "volume-scenario3"){
+              if (numberInvalid(heightfc)) {
+                   errmsg = errmsg + "Value of height of Fumicover invalid.\n";
+              } else{
+                   heightfc = parseFloat(heightfc);
+                   if(heightfc < 1.00)
+                        errmsg = errmsg + heightfc + " height not accepted.\n";
+              }
+              if (numberInvalid(lengthfc)) {
+                   errmsg = errmsg + "Value of length of Fumicover invalid.\n";
+              } else{
+                   lengthfc = parseFloat(lengthfc);
+                   if(lengthfc < 1.00)
+                        errmsg = errmsg + lengthfc + " length not accepted.\n";
+              }
+              if (numberInvalid(basefc)) {
+                   errmsg = errmsg + "Value of width of Fumicover invalid.\n";
+              } else{
+                    basefc = parseFloat(basefc);
+                    if(basefc < 1.00)
+                        errmsg = errmsg + basefc + " width not accepted.\n";
+              }
+	          if (errmsg !== "") {
+                    document.getElementById("info").innerHTML = errmsg;
+                    return;
+              } else {
+                    var datastr = "structure=" + structure + ";heightfc=" + heightfc + ";lengthfc=" + lengthfc + ";basefc=" + basefc + ";";
+                    sendClientMsg(datastr);
+	          }
+          }else if((structure === "volume-scenario4") ||(structure === "volume-scenario5")){
+              if (numberInvalid(diametercl)) {
+                    errmsg = errmsg + "Value of cylinder diameter invalid.\n";
+              } else{
+                    diametercl = parseFloat(diametercl);
+                    if(diametercl < 1.00)
+                        errmsg = errmsg + diametercl + " diameter not accepted.\n";
+              }
+              if (numberInvalid(heightcn)) {
+                    errmsg = errmsg + "Value of height of cone invalid.\n";
+              } else{
+                    heightcn = parseFloat(heightcn);
+                    if(heightcn < 1.00)
+                        errmsg = errmsg + heightcn + " height not accepted.\n";
+              }
+              if (numberInvalid(heightcl)) {
+                    errmsg = errmsg + "Value of height of cylinder invalid.\n";
+              } else{
+                    heightcl = parseFloat(heightcl);
+                    if(heightcl < 1.00)
+                        errmsg = errmsg + heightcl + " height not accepted.\n";
+              }
+	          if (errmsg !== "") {
+                    document.getElementById("info").innerHTML = errmsg;
+                    return;
+              } else {
+                    var datastr = "structure=" + structure + ";diametercl=" + diametercl + ";heightcn=" + heightcn + ";heightcl=" + heightcl + ";";
+                    sendClientMsg(datastr);
+	          }
+          }else if(structure === "volume-scenario6"){
+              if (numberInvalid(diametersc)) {
+                    errmsg = errmsg + "Value of diameter of sack invalid.\n";
+              } else{
+                    diametersc = parseFloat(diametersc);
+                    if(diametersc < 1.00)
+                        errmsg = errmsg + diametersc + " diameter not accepted.\n";
+              }
+              if (numberInvalid(heightsc)) {
+                    errmsg = errmsg + "Value of height of sack invalid.\n";
+              } else{
+                    heightsc = parseFloat(heightsc);
+                    if(heightsc < 1.00)
+                        errmsg = errmsg + heightsc + " height not accepted.\n";
+              }
+	          if (errmsg !== "") {
+                    document.getElementById("info").innerHTML = errmsg;
+                    return;
+              } else {
+                    document.getElementById("info").innerHTML = "";
+                    var datastr = "structure=" + structure + ";diametersc=" + diametersc + ";heightsc=" + heightsc + ";";
+                    sendClientMsg(datastr);
+              }
+	      }
+      }
+
+      //Sending value to Android
+      function sendClientMsg(strval) {
+          JAVJS_DATA_EXCHANGE.pestsDoses(strval)
+      }
+
+      //Getting value from Android
+      function showJavaMsg() {
+          //var javVar = JAVJS_DATA_EXCHANGE.compStatusToJs();
+          document.getElementById("info").innerHTML = javVar;
+      }
+  </script>
+</body>
+</html>

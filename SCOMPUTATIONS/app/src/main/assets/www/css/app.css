@@ -1,0 +1,198 @@
+body {
+     background-color:rgba(75,205,55,0.1);
+}
+
+#dform{
+     width:83%;
+     height:80%;
+     margin:0 auto;
+     margin-top:10%;
+     margin-bottom:2%;
+     padding: 2%;
+     background-color: rgba(135,125,120,0.95);
+     border: 5px solid #0047B2;
+     border-radius: 15px;
+}
+#scrhd{
+    width:83%;
+    height:80%;
+    margin:0 auto;
+    margin-top:10%;
+    margin-bottom:2%;
+    padding: 2%;
+    background-color: rgba(242, 242, 242,0.95);
+}
+#scrhd h4 {
+   font-family: "Trebuchet MS", Helvetica, FreeSans, sans-serif;
+   margin: 0;
+   font-size: 25px;
+   text-align: center;
+   color:#563723;
+}
+#dimg{
+     width:83%;
+     height:60%;
+     margin-left:10%;
+     margin-top:5%;
+     margin-bottom:2%;
+     padding: 2%;
+     border-radius: 15px;
+}
+#dinfo{
+     width:83%;
+     height:40%;
+     margin:0 auto;
+     margin-top:10%;
+     margin-bottom:2%;
+     padding: 2%;
+     background-color: rgba(117, 190, 218, 0.5);
+}
+#dlast{
+     width:83%;
+     height:20%;
+     margin:0 auto;
+     margin-top:5%;
+     margin-bottom:2%;
+     padding: 2%;
+     background-color: rgba(115,121,123,0.95);
+}
+#lower{
+     width:83%;
+     height:20%;
+     margin:0 auto;
+     margin-bottom:2%;
+     padding: 2%;
+     background-color: rgba(115,121,123,0.95);
+}
+#drsult{
+     width:83%;
+     height:80%;
+     margin:0 auto;
+     margin-top:5%;
+     margin-bottom:2%;
+     padding: 2%;
+     background-color: rgba(242, 242, 242,0.95);
+}
+#drsult p {
+  font-family: Helvetica, Geneva, Arial,
+        SunSans-Regular, sans-serif }
+#dform fieldset{
+  background-color: #ddd;
+  border: none;
+}
+#dform ol{list-style: none;
+  margin: 2px;
+  padding:0;
+}
+#dform li{
+  margin: 0 0 9px 0;
+  padding: 0;
+}
+#dform input{
+  background-color: #fff;
+  border: 1px solid #bbb;
+  font-size: 20px;
+  font-weight: 400;
+  font-family: "Trebuchet MS", Helvetica, FreeSans, sans-serif;
+  line-height: 40px;
+  height: 40px;
+  display:block;
+  width:95%;
+}
+
+#dform textarea{
+  background-color: #fff;
+  border: 1px solid #bbb;
+  font-weight: 400;
+  font-family: "Trebuchet MS", Helvetica, FreeSans, sans-serif;
+  font-size: 20px;
+  line-height: 40px;
+  width:95%;
+}
+
+#p1{
+  background-color: #efefef;
+  border-style: groove;
+  font-weight: 400;
+  margin-left: 6px;
+  padding: 0 7px 0 8px;
+  text-overflow: ellipsis;
+  font-size: 20px;
+  line-height: 40px;
+  height: 40px;
+  width:95%
+  font-family: "Trebuchet MS", Helvetica, FreeSans, sans-serif;
+}
+
+#navig{
+  background-color: #efefef;
+  border-style: groove;
+  font-weight: 400;
+  margin-left: 6px;
+  padding: 0 7px 0 8px;
+  text-overflow: ellipsis;
+  font-size: 20px;
+  line-height: 40px;
+  height: 40px;
+  width:95%
+  font-family: "Trebuchet MS", Helvetica, FreeSans, sans-serif;
+}
+
+#dform input, #dform fieldset, #dform select{
+  border-radius: 5px;
+}
+
+#dform h4 {
+   font-family: "Trebuchet MS", Helvetica, FreeSans, sans-serif;
+   margin: 0;
+   font-size: 20px;
+   text-align: center;
+}
+
+#dimg h4 {
+   font-family: "Trebuchet MS", Helvetica, FreeSans, sans-serif;
+   margin: 0;
+   font-size: 25px;
+   text-align: center;
+}
+
+#dinfo p {
+   font-family: "Trebuchet MS", Helvetica, FreeSans, sans-serif;
+   margin: 0;
+   font-size: 20px;
+   text-align: center;
+}
+
+#styled-fanssel-grain-select select,
+#styled-relhumd-select select,
+#styled-fanssel-unitofmeasure-select select,
+#styled-fanssel-desiredairflow-select select,
+#styled-fanssel-floortype-select select,
+#styled-fanssel-fantype-select select,
+#styled-volume-structure-select select,
+#styled-result-view-select select {
+   background-color: #fff;
+   width:97%;
+   padding: 5px;
+   font-weight: 400;
+   font-family: "Trebuchet MS", Helvetica, FreeSans, sans-serif;
+   font-size: 20px;
+   line-height: 30px;
+   border: 0;
+   border-radius: 0;
+   height: 35px;
+}
+
+#styled-fanssel-grain-select,
+#styled-relhumd-select,
+#styled-fanssel-unitofmeasure-select,
+#styled-fanssel-desiredairflow-select,
+#styled-fanssel-floortype-select,
+#styled-fanssel-fantype-select,
+#styled-volume-structure-select,
+#styled-result-view-select {
+   width:95%;
+   height: 35px;
+   overflow: hidden;
+   border: 1px solid #ccc;
+}

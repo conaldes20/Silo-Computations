@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>SILO COMPUTATION</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div id="dimg">
+    <h4 id="h4ilo">Silo Fans</h4><br/>
+    <img src="img/grain_fans1.jpg" alt="grain-fans" />
+</div>
+<div id="dinfo">
+    <p id="info"></p><br/>
+</div>
+<div id="dform">
+    <h4 id="h4id">Fans Selection</h4><br/>
+    <fieldset>
+        <ol>
+            <li>
+                <div id="styled-fanssel-grain-select">
+                    <select name="grain-select" id="fanssel-grain">
+                        <option value="nap" selected="selected">Select Grain</option>
+                        <option value="maize">Maize</option>
+                        <option value="sorghum">Sorghum</option>
+                        <option value="soyabean">Soyabean</option>
+                        <option value="paddyrice">Paddy Rice</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <div id="styled-fanssel-unitofmeasure-select">
+                    <select name="unit" id="fanssel-unitofmeasure">
+                        <option value="nap" selected="selected">Type of unit</option>
+                        <option value="imperial-unit">Imperial unit</option>
+                        <option value="si-unit">SI unit</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <input type="text" id="bin-diameter" name="bin-diameter" placeholder="Bin-diameter (meter or feet)">
+            </li>
+            <li>
+                <input type="text" id="bin-height" name="bin-height" placeholder="Bin height (meter or feet)">
+            </li>
+            <li>
+                <p>Desired airflow (cfm/bu or cubic-metre/cubic-metres)</p>
+                <div id="styled-fanssel-desiredairflow-select">
+                    <select name="air-flow" id="fanssel-desiredairflow">
+                        <option value="nap" selected="selected">Desired Airflow</option>
+                        <option value="0.05">0.05cfm/bu or 0.00067/s</option>
+                        <option value="0.10">0.10cfm/bu or 0.00134/s</option>
+                        <option value="0.25">0.25cfm/bu or 0.00335/s</option>
+                        <option value="0.50">0.50cfm/bu or 0.006/s</option>
+                        <option value="0.75">0.75cfm/bu or 0.01005/s</option>
+                        <option value="1.00">1.00cfm/bu or 0.0134/s</option>
+                        <option value="1.25">1.25cfm/bu or 0.01675/s</option>
+                        <option value="1.50">1.50cfm/bu or 0.0201/s</option>
+                        <option value="2.00">2.00cfm/bu or 0.0268/s</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <div id="styled-fanssel-floortype-select">
+                    <select name="floor-type" id="fanssel-floortype">
+                        <option value="nap" selected="selected">Floor Type</option>
+                        <option value="perforated">Perforated Floor</option>
+                        <option value="ductsystem">Duct System</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <p>Axial: hp(0.33 - 10)/ watts(246 - 7460) <br>Centrifugal: hp(5 - 20)/ watts(3730 - 14920)</p>
+                <div id="styled-fanssel-fantype-select">
+                    <select name="fan-type" id="fanssel-fantype">
+                        <option value="nap" selected="selected">Fan Type</option>
+                        <option value="fans-axial">Axial Fan</option>
+                        <option value="fans-centrifugal">Centrifugal Fan</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <input type="button" id="submitbtn" value="Compute" onclick="compute()">
+            </li>
+        </ol>
+    </fieldset>
+</div>
+<div id="dlast">
+
+</div>
+<script>
+      function isCharDigit(c){
+	      if(c >= '0' && c <= '9')
+              return true;   //!!n.trim() && !!Number(n+.1); // "+.1' to make it work with "." and "0" Chars
+      }
+
+      function numberInvalid(str){
+          var invalidChar = false;
+          var char;
+          var dot = 0;
+          if(str.length > 0){
+	            for( char of str ) {
+    	            if((isCharDigit(char) === false) && (char === '.')){
+   		                dot = dot + 1;
+    	            }else if((isCharDigit(char) === false) && (char !== '.')){
+		                invalidChar = true;
+	                    break;
+	                }
+	            }
+	            if(dot > 1){
+	                invalidChar = true;
+	            }
+          }else{
+	            invalidChar = true;
+	      }
+          return invalidChar;
+      }
+
+      function compute() {
+          var datastr = "";
+          var errmsg = "";
+          var grnam = document.getElementById("fanssel-grain");
+          var grainname = grnam.options[grnam.selectedIndex].value;
+          var unitm = document.getElementById("fanssel-unitofmeasure");
+          var unitofmeasure = unitm.options[unitm.selectedIndex].value;
+          var bindiameter = document.getElementById("bin-diameter").value;
+          var binheight = document.getElementById("bin-height").value;
+          var dairflow = document.getElementById("fanssel-desiredairflow");
+          var airflowselected = dairflow.options[dairflow.selectedIndex].value;
+          var tofflo = document.getElementById("fanssel-fantype");
+          var floortype = tofflo.options[tofflo.selectedIndex].value;
+          var desiredairflow = 0.00;
+          var toffan = document.getElementById("fanssel-fantype");
+          var axialOrcentrifugal = toffan.options[toffan.selectedIndex].value;
+          if(grainname === "nap"){
+                errmsg = errmsg + "Select a gran.\n";
+          }
+          if(unitofmeasure === "nap"){
+                errmsg = errmsg + "Select a unit of measure.\n";
+          }
+
+          if (numberInvalid(bindiameter)) {
+                errmsg = errmsg + "Value of bin diameter invalid.\n";
+          } else{
+		        bindiameter = parseFloat(bindiameter);
+                if(bindiameter <= 1.00)
+                    errmsg = errmsg + bindiameter + " diameter not accepted.\n";
+          }
+
+          if (numberInvalid(binheight)) {
+                errmsg = errmsg + "Value of grain depth invalid.\n";
+          } else{
+		        binheight = parseFloat(binheight);
+                if(binheight < 1.00)
+                    errmsg = errmsg + binheight + " depth not accepted.\n";
+          }
+
+          if(airflowselected === "nap"){
+                errmsg = errmsg + "Select a desired airflow.\n";
+          }else{
+                if(grainname === "paddyrice"){
+                    desiredairflow = 0.26;
+                }else{
+                    airflowselected = parseFloat(airflowselected);
+                    desiredairflow = parseFloat(airflowselected);
+                }
+          }
+
+          if(floortype === "nap"){
+                errmsg = errmsg + "Select air supply method.\n";
+          }
+
+          if(axialOrcentrifugal === "nap"){
+                errmsg = errmsg + "Select fan flow type.\n";
+          }
+
+          if (errmsg !== "") {
+                document.getElementById("info").innerHTML = errmsg;
+                return;
+          } else {
+                document.getElementById("info").innerHTML = "";
+                var datastr = "grainname=" + grainname + ";unitofmeasure=" + unitofmeasure + ";bindiameter=" + bindiameter +
+                ";binheight=" + binheight + ";airflowselected=" + airflowselected + ";desiredairflow=" + desiredairflow +
+                ";floortype=" + floortype + ";axialOrcentrifugal=" + axialOrcentrifugal + ";";
+                sendClientMsg(datastr);
+          }
+      }
+
+      //Sending value to Android
+      function sendClientMsg(strval) {
+          JAVJS_DATA_EXCHANGE.selectFans(strval)
+      }
+
+      //Getting value from Android
+      function showJavaMsg() {
+          //var javVar = JAVJS_DATA_EXCHANGE.compStatusToJs();
+          document.getElementById("info").innerHTML = javVar;
+      }
+  </script>
+</body>
+</html>

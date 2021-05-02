@@ -1,0 +1,8 @@
+/*
+footable-start.js - initialize footable.
+*/
+(function($){
+    $('.table').footable({
+        "toggleColumn": "last",
+    });
+}(jQuery));

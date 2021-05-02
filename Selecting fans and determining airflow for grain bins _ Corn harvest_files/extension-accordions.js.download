@@ -1,0 +1,241 @@
+const extensionAccordions = (function () {
+
+  const SPACE_BAR = 32;
+  const ENTER_KEY = 13;
+  
+  function init() {
+    openAccordionWhenHashMatches(window.location.hash);
+    addAccordionEventHandlers();
+    addAccordionGroupEventHandlers();
+    window.addEventListener("hashchange", handleHashChange);
+  }
+
+  function handleHashChange() {
+    // if there is an accordion that matches the hash and it is closed
+    // we want to remove the hash from the URL
+    const accordion = getAccordionByHashOrFalse(window.location.hash);
+    if (accordion) {
+      const accordionBody = accordion.querySelector(".accordion-body");
+      if (accordionBody.classList.contains("is-collapsed")) {
+        openAccordionWhenHashMatches(window.location.hash);
+        accordion.scrollIntoView(true);
+        accordionBody.focus();
+      }
+    }
+  }
+
+  function openAccordionWhenHashMatches(hash) {
+    if (! hash) return;
+    const accordion = getAccordionByHashOrFalse(hash);
+    if (accordion) {
+      accordion.setAttribute('data-id', accordion.id);
+      toggleAccordion(accordion);
+      // assuming this is page load, or other event where you open an accordion
+      // by link reference, scroll the accordion into view
+      window.scrollTo({
+        top: offset(accordion).top,
+        behavior: "smooth",
+      });
+    }
+  }
+
+  function getAccordionByHashOrFalse(hash) {
+    const escapedHash = escapeURLEncoding(hash);
+    try {
+      const elementWithHashId = document.querySelector(escapedHash);
+      if (!elementWithHashId) return false;
+      const accordion = elementWithHashId.parentElement;
+      if (accordion && isAccordion(accordion)) {
+        return accordion;
+      }
+    }
+    // DomException, fail nicely
+    catch (e) {
+      return false;
+    }
+    return false;
+  }
+
+  function isAccordion(element) {
+    return element.classList.contains('accordion');
+  }
+
+  function addAccordionEventHandlers() {
+    const accordionTitlesNodes = document.querySelectorAll(".accordion");
+    const eventNames = ["click"];
+    const accordionTitles = Array.prototype.slice.call(accordionTitlesNodes);
+
+    accordionTitles.forEach( function (title){
+      addEventListenersToElementWithCallback(eventNames, title, handleAccordionInteraction);
+    });
+  }
+
+  function addAccordionGroupEventHandlers() {
+    const accordionGroupsNodes = document.querySelectorAll(".accordion-group");
+    const eventNames = ["click", "keypress"];
+    const accordionGroups = Array.prototype.slice.call(accordionGroupsNodes);
+
+    accordionGroups.forEach( function (accordionGroup) {
+      const openAllElement = accordionGroup.querySelector(".accordion-open-all");
+      const closeAllElement = accordionGroup.querySelector(".accordion-close-all");
+
+      if (openAllElement && closeAllElement) {
+        addEventListenersToElementWithCallback(eventNames, openAllElement, handleOpenOrCloseAll
+          .bind(accordionGroup));
+        addEventListenersToElementWithCallback(eventNames, closeAllElement, handleOpenOrCloseAll
+          .bind(accordionGroup));
+      }
+    });
+  }
+
+  function addEventListenersToElementWithCallback(listenerNames, element, callback) {
+    listenerNames.forEach( function (listenerName) {
+      element.addEventListener(listenerName, callback.bind(element));
+    });
+  }
+
+  function handleAccordionInteraction(event) {
+    const accordionNodeName = "BUTTON";
+    const svgNodeName = "path";
+
+    if (event.target.nodeName == accordionNodeName || event.target.nodeName == svgNodeName) {
+      toggleAccordion(this);
+    }
+  }
+
+  function handleOpenOrCloseAll(event) {
+    const accordionGroup = this;
+    const accordionNodes = accordionGroup.querySelectorAll(".accordion");
+    const accordions = Array.prototype.slice.call(accordionNodes);
+    
+    if (isCloseAllElement(event.target)) {
+      accordions.forEach( function (accordion) {
+        closeAccordion(accordion);
+      });
+    }
+
+    if (isOpenAllElement(event.target)) {
+      accordions.forEach( function (accordion) {
+        openAccordion(accordion);
+      });
+    }
+
+    // Since they will all be open or closed, clean up the URL to not reference
+    // any individual accordion if one is referenced
+    if (window.location.hash) {
+      history.replaceState({}, "", window.location.pathname);
+    }
+  }
+
+  function isCloseAllElement(element) {
+    return element.classList.contains("accordion-close-all");
+  }
+
+  function isOpenAllElement(element) {
+    return element.classList.contains("accordion-open-all");
+  }
+
+  function isValidKeyboardEvent(event) {
+    return event instanceof KeyboardEvent && isValidKeyCode(event.keyCode);
+  }
+
+  function isValidKeyCode(keyCode) {
+    return (keyCode == ENTER_KEY || keyCode == SPACE_BAR);
+  }
+
+  function toggleAccordion(accordion) {
+    const accordionBody = accordion.querySelector(".accordion-body");
+    const isExpanded = !accordionBody.classList.contains("is-collapsed");
+
+    if (isExpanded) {
+      closeAccordionWithHistory(accordion);
+    } else {
+      openAccordionWithHistory(accordion);
+    }
+  }
+
+  function openAccordionWithHistory(accordion) {
+    openAccordion(accordion);
+    const accordionButton = accordion.querySelector("button");
+    history.replaceState({}, "", window.location.pathname + accordionButton.getAttribute("href"));
+  }
+
+  function closeAccordionWithHistory(accordion) {
+    closeAccordion(accordion);
+    history.replaceState({}, "", window.location.pathname);
+  }
+
+  function openAccordion(accordion) {
+    const accordionBody = accordion.querySelector(".accordion-body");
+    const accordionButton = accordion.querySelector("button");
+    const isExpanded = !accordionBody.classList.contains("is-collapsed");
+
+    if (isExpanded) {
+      return;
+    }
+    // Otherwise open it up
+    accordionBody.classList.remove("is-collapsed");
+    accordionButton.setAttribute('aria-expanded', true);
+    // history.replaceState({}, "", window.location.pathname + accordionButton.getAttribute("href"));
+    animateAccordionIcon(accordion);
+  }
+
+  function offset(el) {
+    var rect = el.getBoundingClientRect(),
+    scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+    scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
+  }
+
+  function closeAccordion(accordion) {
+    const accordionBody = accordion.querySelector(".accordion-body");
+    const accordionButton = accordion.querySelector("button");
+    const isCollapsed = accordionBody.classList.contains("is-collapsed");
+    if (isCollapsed) {
+      // Do nothing
+      return;
+    }
+    // Otherwise close it
+    accordionBody.classList.add("is-collapsed");
+    accordionButton.setAttribute('aria-expanded', false);
+    // history.replaceState({}, "", window.location.pathname);
+    animateAccordionIcon(accordion);
+  }
+
+  function animateAccordionIcon(accordion) {
+    const accordionBody = accordion.querySelector(".accordion-body");
+    const accordionButton = accordion.querySelector("button");
+    const accordionIcon = accordionButton.querySelector("svg");
+    const isExpanded = !accordionBody.classList.contains("is-collapsed");
+    // this fixes weird page load issue
+    if (! accordionIcon) return;
+    if (isExpanded) {
+      accordionIcon.style.transform = "rotate(-225deg) scale(1.1)";
+    } else {
+      accordionIcon.style.transform = "rotate(0deg) scale(1)";
+    }
+  }
+
+  function escapeURLEncoding(hash) {
+    // Christian's code that limited (, ), and double commas in a drawer title from being linkable
+    //const urlEncodingPrefix = "%";
+    // if (! hash.includes(urlEncodingPrefix)) return hash;
+    //const escapedHash = hash.replace(urlEncodingPrefix, "\\$&");
+
+    // the following is code written by David Naughton during Tech coworking on 7/24 with Terri
+    const urlEncodingPrefix = '%';
+    const urlEncodingPrefixRegex = new RegExp(urlEncodingPrefix, 'g');
+    // searching for any % in the drawer id's string (which is a special character in the drawer title)
+    const escapedHash = hash.replace(urlEncodingPrefixRegex, '\\' + urlEncodingPrefix);
+    return escapedHash;
+  }
+
+  // The public API for Extension Accordions
+  return {
+    init: init,
+    toggleAccordion: toggleAccordion
+  };
+
+})(window);
+
+document.addEventListener("DOMContentLoaded", extensionAccordions.init);

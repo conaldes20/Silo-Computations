@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>SILO COMPUTATION</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div id="dimg">
+    <h4 id="h4ilo">Relative Humidity Chart</h4><br/>
+    <img src="img/grain_moisture.jpg" alt="grain-moisture" />
+</div>
+<div id="dinfo">
+    <p id="info"></p><br/>
+</div>
+<div id="dform">
+    <h4 id="h4id">Relative Humidity</h4><br/>
+    <fieldset>
+        <ol>
+            <li>
+                <div id="styled-relhumd-select">
+                    <select name="grain-select" id="relhumd">
+                        <option value="nap" selected="selected">Select Grain</option>
+                        <option value="maize">Maize</option>
+                        <option value="sorghum">Sorghum</option>
+                        <option value="soyabean">Soyabean</option>
+                        <option value="paddyrice">Paddy Rice</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <input type="text" id="wetbulbtemp" name="wetbulbtemp" placeholder="Wet bulb temperature (celsius)">
+            </li>
+            <li>
+                <input type="text" id="drybulbtemp" name="drybulbtemp" placeholder="Dry bulb temperature (celsius)">
+            </li>
+            <li>
+                <input type="button" id="submitbtn" value="Compute" onclick="compute()">
+            </li>
+        </ol>
+    </fieldset>
+</div>
+<div id="dlast">
+
+</div>
+<script>
+      function isCharDigit(c){
+	      if(c >= '0' && c <= '9')
+              return true;   //!!n.trim() && !!Number(n+.1); // "+.1' to make it work with "." and "0" Chars
+      }
+
+      function numberInvalid(str){
+          var invalidChar = false;
+          var char;
+          var dot = 0;
+          if(str.length > 0){
+	            for( char of str ) {
+    	            if((isCharDigit(char) === false) && (char === '.')){
+   		                dot = dot + 1;
+    	            }else if((isCharDigit(char) === false) && (char !== '.')){
+		                invalidChar = true;
+	                    break;
+	                }
+	            }
+	            if(dot > 1){
+	                invalidChar = true;
+	            }
+          }else{
+	            invalidChar = true;
+	      }
+          return invalidChar;
+      }
+
+      function compute() {
+          var datastr = "";
+          var errmsg= "";
+          var crpnam = document.getElementById("relhumd");
+          var cropname = crpnam.options[crpnam.selectedIndex].value;
+          //var text = e.options[e.selectedIndex].text;
+          var wetbulb = document.getElementById("wetbulbtemp").value;
+	      var drybulb = document.getElementById("drybulbtemp").value;
+          if (numberInvalid(wetbulb)) {
+                errmsg = errmsg + "Value of wet bulb temperature invalid.\n";
+          } else{
+                wetbulb = parseFloat(wetbulb);
+                if(wetbulb <= 1.00)
+                    errmsg = errmsg + wetbulb + " degree not accepted.\n";
+          }
+
+          if (numberInvalid(drybulb)) {
+                errmsg = errmsg + "Value of dry bulb temperature invalid.\n";
+          } else{
+                drybulb = parseFloat(drybulb);
+                if(drybulb <= 1.00)
+                    errmsg = errmsg + drybulb + " degree not accepted.\n";
+          }
+
+          if(cropname === "nap"){
+                errmsg = errmsg + "Select a crop.";
+          }
+          if (errmsg !== "") {
+                document.getElementById("info").innerHTML = errmsg;
+                return;
+          } else {
+                document.getElementById("info").innerHTML = "";
+                var datastr = "cropname=" + cropname + ";wetbulb=" + wetbulb + ";drybulb=" + drybulb + ";";
+                sendClientMsg(datastr);
+          }
+      }
+
+      //Sending value to Android
+      function sendClientMsg(strval) {
+          JAVJS_DATA_EXCHANGE.relhumdEmc(strval)
+      }
+
+      //Getting value from Android
+      function showJavaMsg() {
+          //var javVar = JAVJS_DATA_EXCHANGE.compStatusToJs();
+          document.getElementById("info").innerHTML = javVar;
+      }
+  </script>
+</body>
+</html>

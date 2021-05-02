@@ -1,0 +1,63 @@
+jQuery(document).ready(function() {
+
+  // This handles galleries added to the page via the "Image Grid Gallery"
+  // content block
+  jQuery('.popup-gallery').each( function(gallery) {
+    jQuery(this).magnificPopup({
+      delegate: 'a', // child items selector, by clicking on it popup will open
+      type: 'image',
+      gallery: {
+        // options for gallery
+        enabled: true
+      },
+      image: {
+        titleSrc: function(item) {
+          var image = item.el[0].querySelector("img");
+          return image.getAttribute("title");
+        }
+      }
+    });
+  });
+
+  // This handles images embeded via the WYSWIG
+  jQuery('.figure-wrapper').each( function(index, figure) {
+    // Since we only want the popup to work on links to images,
+    // check for that here
+    var linkWithinFigure = figure.querySelector("a");
+
+    if (linkWithinFigure && hasImageFileExtension(linkWithinFigure.href)) {
+
+      jQuery(this).magnificPopup({
+        delegate: 'a', // child items selector, by clicking on it popup will open
+        type: 'image',
+        image: {
+          titleSrc: function(item) {
+            var image = item.el[0].querySelector("img");
+            return image.getAttribute("title");
+          }
+        }
+      });
+
+    }
+
+    // Drupal gives these images an Aria role of group
+    // Troubleshooting the markup generation was fruitless,
+    // so we just remove it here
+    jQuery(this).removeAttr("role");
+  });
+
+
+  function hasImageFileExtension(str) {
+    var IMAGE_FILE_EXTENSIONS = [".jpg", ".jpeg", ".gif", ".png", ".bmp"];
+    var hasExtension = false;
+
+    IMAGE_FILE_EXTENSIONS.forEach( function(extension) {
+      if (str.indexOf(extension) > -1) {
+        hasExtension = true;
+      }
+    });
+
+    return hasExtension;
+  }
+
+});

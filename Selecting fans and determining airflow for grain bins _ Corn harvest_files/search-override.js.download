@@ -1,0 +1,48 @@
+// Update Google Custom Search Engine placeholder text AFTER Google JS loads & places it
+// Adapted from https://gist.github.umn.edu/dtrexel/23a96757d74d6f695bcc86b0eda409db#file-law_gcse_placeholder-txt
+Drupal.behaviors.coffeyOverrideSearch = {
+  attach: function (context, settings) {
+    // The observer requires a DOM node that exists BEFORE Google places the form on the page
+    var searchBoxes = document.querySelectorAll(".gcse-coffey-search");
+    // conver to an array, rather than a nodelist
+    searchBoxes = Array.prototype.slice.call(searchBoxes);
+
+    if (!searchBoxes) return;
+
+    var observerPairs = searchBoxes.map(function (searchBox) {
+      return {
+        searchBox: searchBox,
+        observer: new MutationObserver(changeSearchPlaceholderText)
+      }; 
+    });
+
+    function changeSearchPlaceholderText(mutations, observer) {
+      var searchText = "Search Extension";
+      var searchBox = mutations
+        .map(function (mutation) {
+          return Array.prototype.slice.call(mutation.addedNodes);
+        })
+        .reduce(function (acc, addedNode) {
+          return acc.concat(addedNode);
+        }, [])
+        .filter(function (element) {
+          return element.nodeName == "INPUT" && element.classList.contains("gsc-input");
+        })
+        .reduce(function (element) {
+          return element;
+        });
+
+      if (searchBox) {
+        searchBox.setAttribute("placeholder", searchText);
+      }
+    }
+
+    observerPairs.forEach(function (pair) {
+      pair.observer.observe(pair.searchBox, {
+        childList: true,
+        subtree: true
+      });
+    });
+  }
+
+};

@@ -1,0 +1,251 @@
+@media (max-width: 1024px) {
+  .menu-wrap .menu {
+    width: 35vw;
+  }
+  .menu-wrap .menu > div {
+    width: 35vw;
+  }
+
+  .menu-wrap .menu > div > div {
+    max-width: 35vw;
+  }
+
+  .computation-form {
+    padding: 0 8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  #main-nav {
+    padding: 0 2rem;
+  }
+
+  .menu-wrap .toggler {
+    top: 22.5px;
+    right: 43px;
+    width: 25px;
+    height: 25px;
+  }
+
+  .menu-wrap .hamburger {
+    padding: 13px;
+    right: 25px;
+  }
+  /* Hamburger Lines */
+  .menu-wrap .hamburger > div {
+    height: 1.4px;
+  }
+
+  /* Hamburger Lines - Top & Bottom */
+  .menu-wrap .hamburger > div::before,
+  .menu-wrap .hamburger > div::after {
+    top: -10px;
+    height: 1.4px;
+  }
+
+  /* Moves third line down */
+  .menu-wrap .hamburger > div::after {
+    top: 10px;
+  }
+
+  .menu-wrap .menu {
+    width: 50vw;
+  }
+
+  .menu-wrap .menu > div {
+    width: 50vw;
+  }
+
+  .menu-wrap .menu > div > div {
+    max-width: 50vw;
+  }
+
+  #showcase .showcase-content {
+    padding-top: 17%;
+  }
+
+  #showcase .showcase-content h1 {
+    font-size: 3.5rem;
+  }
+
+  #showcase .showcase-content p {
+    font-size: 1rem;
+  }
+
+  #showcase-inner .showcase-inner-content {
+    padding-top: 15%;
+  }
+
+  #showcase-inner .showcase-inner-content h1 {
+    font-size: 2.4rem;
+  }
+
+  .section-title {
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+
+  .computation-form {
+    padding: 0 3rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .menu-wrap .menu {
+    width: 65vw;
+  }
+
+  .menu-wrap .menu > div {
+    width: 65vw;
+  }
+
+  .menu-wrap .menu > div > div {
+    max-width: 65vw;
+  }
+
+  #showcase .showcase-content {
+    padding-top: 25%;
+  }
+
+  #showcase .showcase-content h1 {
+    font-size: 2.7rem;
+  }
+
+  #showcase-inner .showcase-inner-content {
+    padding-top: 18%;
+  }
+
+  #showcase-inner .showcase-inner-content h1 {
+    font-size: 2.2rem;
+  }
+
+  .section-title {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    font-size: 1.35rem;
+  }
+
+  .computation-form {
+    padding: 0 0;
+  }
+}
+
+@media (max-width: 360px) {
+  .menu-wrap .menu {
+    width: 70vw;
+  }
+
+  .menu-wrap .menu > div {
+    width: 70vw;
+  }
+
+  .menu-wrap .menu > div > div {
+    max-width: 70vw;
+  }
+
+  #showcase .showcase-content {
+    padding-top: 30%;
+  }
+
+  #showcase .showcase-content h1 {
+    font-size: 2.5rem;
+  }
+
+  #showcase-inner .showcase-inner-content {
+    padding-top: 25%;
+  }
+
+  #showcase-inner .showcase-inner-content h1 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .menu-wrap .menu {
+    width: 80vw;
+  }
+
+  .menu-wrap .menu > div {
+    width: 80vw;
+  }
+
+  .menu-wrap .menu > div > div {
+    max-width: 80vw;
+  }
+
+  #showcase .showcase-content {
+    padding-top: 40%;
+  }
+
+  #showcase .showcase-content h1 {
+    font-size: 2.2rem;
+  }
+
+  #showcase-inner .showcase-inner-content {
+    padding-top: 30%;
+  }
+
+  #showcase-inner .showcase-inner-content h1 {
+    font-size: 1.8rem;
+  }
+}
+
+/* Landscape */
+@media (max-height: 600px) {
+  #showcase .showcase-content h1 {
+    font-size: 2.5rem;
+  }
+
+  #showcase .showcase-content p {
+    font-size: 1.1rem;
+  }
+
+  #showcase-inner {
+    height: 60vh;
+  }
+
+  #showcase-inner .showcase-inner-content {
+    height: 60vh;
+    padding-top: 12%;
+  }
+
+  #showcase-inner .showcase-inner-content h1 {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-height: 360px) {
+  #showcase .showcase-content h1 {
+    font-size: 2.3rem;
+  }
+
+  #showcase .showcase-content p {
+    font-size: 1rem;
+  }
+
+  #showcase-inner .showcase-inner-content {
+    padding-top: 15%;
+  }
+
+  #showcase-inner .showcase-inner-content h1 {
+    font-size: 2.3rem;
+  }
+}
+
+@media (max-height: 320px) {
+  #showcase .showcase-content {
+    padding-top: 17%;
+  }
+
+  #showcase .showcase-content h1 {
+    padding-bottom: 1.2rem;
+  }
+
+  #showcase .showcase-content p {
+    padding-bottom: 1.1rem;
+  }
+
+  #showcase-inner .showcase-inner-content h1 {
+    font-size: 2rem;
+  }
+}

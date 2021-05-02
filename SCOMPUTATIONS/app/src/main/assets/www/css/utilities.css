@@ -1,0 +1,91 @@
+.container {
+  max-width: var(--max-width);
+  padding: 0 2rem;
+  margin: auto;
+  overflow: hidden;
+}
+
+.btn {
+  display: inline-block;
+  border: 1px solid var(--dark-color);
+  color: #333;
+  border-radius: 2px;
+  padding: 0.5rem 1.5rem;
+  margin-top: 0.55rem;
+  font-weight: bold;
+  text-transform: capitalize;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn:hover {
+  background: var(--dark-color);
+  color: #fff;
+}
+
+.primary-color {
+  color: var(--primary-color);
+}
+
+.py {
+  padding: 2rem 0 2rem;
+}
+
+.pyfo {
+  background: #ebf3e2;
+  padding: 5rem 0 10rem;
+}
+
+.section-title {
+  padding-bottom: 3rem;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.title {
+  padding: 4rem 0 0.5rem;
+  font-size: 1.3rem;
+  text-transform: capitalize;
+  font-weight: bold;
+}
+
+/* ----------FORM--------------- */
+.computation-form {
+  display: flex;
+  flex-direction: column;
+  padding: 0 10rem;
+}
+
+label {
+  margin: 1.5rem 0.3rem 0.7rem;
+}
+
+input,
+select {
+  padding: 0.7rem 0.5rem;
+  background: #ebf7f5;
+  outline-color: var(--primary-color);
+  border: none;
+}
+
+button {
+  display: inline-block;
+  border: 1px solid var(--dark-color);
+  background: var(--dark-color);
+  color: #fff;
+  border-radius: 2px;
+  padding: 0.7rem 1.5rem;
+  margin-top: 1.5rem;
+  width: 70%;
+  margin-left: 15%;
+  font-weight: bold;
+  text-transform: capitalize;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+button:hover {
+  background: var(--bg-white);
+  color: #333;
+}

@@ -1,0 +1,57 @@
+/* 
+
+  This file sets aria labels on links styled in the Drupal WSYWIG.
+  It also forces external links to have a blank target and appropriate 
+  rel attributes.
+
+*/
+
+(function() {
+
+  window.addEventListener("DOMContentLoaded", function() {
+    handleGenericExternalLinks();
+    // Set specific aria labels based on styles from WYSWIG
+    setAttributeWithValueOnElementsBySelector("aria-label", "Open link in new tab.", ".external");
+    setAttributeWithValueOnElementsBySelector("aria-label", "Open PDF in new tab.", ".pdf");
+    setAttributeWithValueOnElementsBySelector("aria-label", "Open Excel Spreadsheet in new tab.", ".excel");
+    setAttributeWithValueOnElementsBySelector("aria-label", "Open Powerpoint in new tab.", ".powerpoint");
+    setAttributeWithValueOnElementsBySelector("aria-label", "Open file in new tab.", ".file");
+  });
+
+  function setAttributeWithValueOnElementsBySelector(attribute, attributeValue, selector) {
+    const elementNodes = document.querySelectorAll(selector);
+    const elements = Array.prototype.slice.call(elementNodes);
+    setAttributeWithValueOnElements(attribute, attributeValue, elements);
+  }
+
+  function setAttributeWithValueOnElements(attribute, attributeValue, elements) {
+    elements.forEach( function (element) {
+      element.setAttribute(attribute, attributeValue);
+    });
+  }
+
+  function handleGenericExternalLinks() {
+    const allLinkNodes = document.querySelectorAll("a"); 
+    const allLinks = Array.prototype.slice.call(allLinkNodes);
+    allLinks.forEach( function (link) {
+      if (isExternalLink(link)) {
+        alterExternalLink(link);
+      }
+    });
+  }
+
+  function isExternalLink(link) {
+    if (link.href.charAt(0) === "#") return false;
+    if (link.href.indexOf(window.location.hostname) > -1) return false;
+    // if (link.href.includes(window.location.hostname)) return false;
+    return true;
+  }
+
+
+  function alterExternalLink(link) {
+    link.setAttribute("target", "_blank");
+    link.setAttribute("rel", "noopener noreferrer");
+    link.setAttribute("aria-label", "Open link in new tab.");
+  }
+
+})();

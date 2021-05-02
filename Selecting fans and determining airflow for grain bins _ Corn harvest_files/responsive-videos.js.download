@@ -1,0 +1,65 @@
+document.addEventListener("DOMContentLoaded", function() {
+  // Need to support content that is hidden in drawers
+  
+
+  // grab all videos on the page
+  var allIframes = document.querySelectorAll("iframe");
+  var iframes = toArray(allIframes);
+  var videoIframes = iframes.filter(hasVideoDomain);
+
+  videoIframes.forEach(function(iframe) {
+    // store each iframe's original height and width as data attributes
+    var originalWidth = iframe.getAttribute("width");
+    var originalHeight = iframe.getAttribute("height");
+    iframe.setAttribute("data-width", originalWidth);
+    iframe.setAttribute("data-height", originalHeight);
+  });
+
+  // kick off initial scaling
+  scaleIframes(videoIframes);
+
+  // if this becomes a performance issue, we should probably debounce this
+  window.onresize = function() {
+    scaleIframes(videoIframes);
+  };
+
+  function scaleIframes(iframes) {
+    var MINIMUM_HEIGHT = 0;
+    iframes.forEach(function(iframe) {
+      var originalHeight = iframe.dataset.height;
+      var originalWidth = iframe.dataset.width;
+      var newWidth = iframe.offsetWidth;
+      var newHeight = (originalHeight * newWidth) / originalWidth;
+      // fix case where hidden items have no height, or original width
+      // is undefined
+      if (originalWidth && newHeight > MINIMUM_HEIGHT) {
+        iframe.setAttribute("height", newHeight);
+      }
+    });
+  }
+
+  function hasVideoDomain(iframe) {
+    var videoDomains = [
+      "youtube.com",
+      "vimeo.com",
+    ];
+    var hasMatchingDomain = false;
+    videoDomains.forEach( function(domain) {
+      if (!hasMatchingDomain && iframe.src.indexOf(domain) > -1) {
+        hasMatchingDomain = true;
+      }
+    });
+    return hasMatchingDomain;
+  }
+
+  // Cross-browser array function, using instead of fancy Array.from()
+  function toArray(obj) {
+    var array = [];
+    // iterate backwards ensuring that length is an UInt32
+    for (var i = obj.length >>> 0; i--;) { 
+      array[i] = obj[i];
+    }
+    return array;
+  }
+
+});
